@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Fonction pour vérifier si un nombre est un palindrome
+// ijuiFonction pour vérifier si un nombre est un palindrome
 int estPalindrome(int nombre) {
     int original = nombre;
     int longueur = 0;
