@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Application Web</title>
+    <style>
+        /* Styles CSS pour le bouton */
+        .button {
+            background-color: #4CAF50; /* couleur de fond verte */
+            border: none;
+            color: white; /* couleur du texte blanc */
+            padding: 15px 32px; /* taille du bouton */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px; /* coins arrondis */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* ombre */
+            transition: box-shadow 0.3s ease; /* transition douce de l'ombre */
+        }
+        /* Au survol, agrandir légèrement le bouton */
+        .button:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        /* Styles CSS pour le canvas */
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur Ma Application Web !</h1>
+    <p>Cette application est en cours de développement. Voici quelques fonctionnalités extraordinaires à venir :</p>
+    <ul>
+        <li>Ajout d'un système d'authentification sécurisé</li>
+        <li>Intégration d'une carte interactive pour afficher des données géographiques</li>
+        <li>Mise en place d'un chat en direct pour une communication en temps réel</li>
+        <li>Création d'un tableau de bord personnalisé pour les utilisateurs</li>
+    </ul>
+    <select id="algorithm">
+        <option value="bubble">Tri à bulles</option>
+        <option value="selection">Tri par sélection</option>
+        <!-- Ajoute d'autres options pour d'autres algorithmes de tri -->
+    </select>
+    <canvas id="visualization" width="800" height="400"></canvas>
+
+    <button class="button" onclick="bubbleSortVisualization()">Démarrer le tri à bulles</button>
+
+    <script>
+         ctx.clearRect(0, 0, canvas.width, canvas.height);
+                var barWidth = canvas.width / n;
+                var barHeightRatio = canvas.height / Math.max(...array);
+                for (var i = 0; i < n; i++) {
+                    var barHeight = array[i] * barHeightRatio;
+                    ctx.fillStyle = "blue";
+                    ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+                }
+        function bubbleSortVisualization() {
+            var canvas = document.getElementById("visualization");
+            var ctx = canvas.getContext("2d");
+            var array = generateRandomArray(100); // Génère un tableau de 100 éléments aléatoires
+            var n = array.length;
+
+
+            /* Fonction pour générer un tableau de nombres aléatoires
+            function generateRandomArray(size) {
+                var arr = [];
+                for (var i = 0; i < size; i++) {
+                    arr.push(Math.floor(Math.random() * 100) + 1);
+                    arr.push(i+1);
+                }
+                return arr;
+            } */
+
+            function generateRandomArray(taille) {
+             // Crée un tableau vide de la taille spécifiée
+                var tableau = new Array(taille);
+
+             // Remplit le tableau avec des valeurs consécutives
+                for (var i = 0; i < taille; i++) {
+                    tableau[i] = i + 1;
+                }
+
+                // Mélange les éléments du tableau de manière aléatoire
+                for (var i = taille - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                var temp = tableau[i];
+                    tableau[i] = tableau[j];
+                    tableau[j] = temp;
+                }
+
+                // Retourne le tableau rempli
+                return tableau;
+                }
+
+
+            
+
+            // Fonction pour dessiner le tableau sur le canvas
+            function drawArray() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                var barWidth = canvas.width / n;
+                var barHeightRatio = canvas.height / Math.max(...array);
+                for (var i = 0; i < n; i++) {
+                    var barHeight = array[i] * barHeightRatio;
+                    ctx.fillStyle = "blue";
+                    ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+                }
+            }
+
+            // Fonction pour effectuer le tri à bulles et dessiner chaque étape sur le canvas
+            async function bubbleSort() {
+                for (var i = 0; i < n - 1; i++) {
+                    for (var j = 0; j < n - i - 1; j++) {
+                        if (array[j] > array[j + 1]) {
+                            // Échange les éléments
+                            var temp = array[j];
+                            array[j] = array[j + 1];
+                            array[j + 1] = temp;
+                            // Dessine le tableau après chaque échange
+                            drawArray();
+                            await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
+                        }
+                    }
+                }
+            }
+
+            // Démarrer le tri à bulles
+            bubbleSort();
+        }
+    </script>
+</body>
+</html>
+
