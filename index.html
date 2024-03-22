@@ -33,7 +33,7 @@
 </head>
 <body>
     <h1>Bienvenue sur Mon Application Web !</h1>
-    <p>Cette application est en cours de développement. Voici quelques fonctionnalités extraordinaires à venir :</p>
+    <p>Cette application est en cours de développement.</p>
 
 
 
@@ -45,24 +45,50 @@
     <canvas id="visualization" width="800" height="400"></canvas>
 
     <button id="idbutton" class="button" onclick="SortVisualization()">Démarrer le tri</button>
-   
+    
+    <label for="arraySize">Taille du tableau : </label>
+    <input type="number" id="arraySize" name="arraySize" min="1" max="1000" value="100">
+
+    <div id="errorMessage" style="display: none; color: red;"></div>
+
+
 
     <script>
         let selectValue;
+        let valueinput;
         //récupère la valeur dans le choix du tri
         function getSelectValue() {
             const selectElement = document.querySelector('#mySelect');
             selectValue = selectElement.value;
-            console.log(selectValue);
         }
 
+        function getValueinput() {
+            var inputElement = document.getElementById("arraySize");
+            // Récupérer la valeur de l'attribut value
+            valueinput = inputElement.value;
+        }
+
+        //affiche le message d'erreur 
+        function afficherErreur(message) {
+    var errorMessageElement = document.getElementById("errorMessage");
+    errorMessageElement.innerText = message;
+    errorMessageElement.style.display = "block";
+    }
+
+
         function SortVisualization() {
+            getSelectValue();
+            getValueinput();
+            if(valueinput <3 || valueinput > 1000) {
+                afficherErreur("la valeur doit être comrpis entre 3 et 1000");
+                return;
+            }
+
             var canvas = document.getElementById("visualization");
             var ctx = canvas.getContext("2d");
-            var array = generateRandomArray(100); // Génère un tableau de 100 éléments aléatoires
+            var array = generateRandomArray(valueinput); // Génère un tableau de valueinput éléments aléatoires
             var n = array.length;
-            getSelectValue();
-
+            
             // Fonction pour dessiner le tableau sur le canvas
             function drawArray() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
