@@ -33,7 +33,13 @@
 </head>
 <body>
     <h1>Bienvenue sur Mon Application Web !</h1>
-    <p>Cette application est en cours de développement.</p>
+    <p>Cette application est en cours de développement. voici ce qu'il faut rajouter :</p>
+    <ul>
+        <li>performance du tri :temps d'execution (avec ou sans l'attente jsp), nombre de comparaison, nombre de déplacement de vlaeur</li>
+        <li>des boutons pour démarer, mettre en pause et peu être étape par étape</li>
+        <li>pouvoir selecioner entre quoi et quoi les valeurs sont comprisent </li>
+        <li> rajouter de algorithmes</li>
+    </ul>
 
 
 
@@ -51,11 +57,14 @@
 
     <div id="errorMessage" style="display: none; color: red;"></div>
 
+    <button class="button" onclick="stopFunction()">stop</button>
 
 
     <script>
+        //constantes : 
         let selectValue;
         let valueinput;
+        let stopExecution = false;
         //récupère la valeur dans le choix du tri
         function getSelectValue() {
             const selectElement = document.querySelector('#mySelect');
@@ -68,12 +77,16 @@
             valueinput = inputElement.value;
         }
 
+        function stopFunction() {
+        stopExecution = true;
+        }
+
         //affiche le message d'erreur 
         function afficherErreur(message) {
-    var errorMessageElement = document.getElementById("errorMessage");
-    errorMessageElement.innerText = message;
-    errorMessageElement.style.display = "block";
-    }
+            var errorMessageElement = document.getElementById("errorMessage");
+            errorMessageElement.innerText = message;
+            errorMessageElement.style.display = "block";
+        }
 
 
         function SortVisualization() {
@@ -113,6 +126,10 @@
                             // Dessine le tableau après chaque échange
                             drawArray();
                             await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
+                            if(stopExecution) {
+                                stopExecution=false;
+                                return;
+                            }
                         }
                     }
                 }
@@ -135,6 +152,10 @@
                         // Dessine le tableau après chaque échange
                         drawArray();
                         await new Promise(resolve => setTimeout(resolve, 35)); // Attendre 10 millisecondes
+                        if(stopExecution) {
+                            stopExecution=false;
+                            return;
+                        }
                     }
                 }
             }
