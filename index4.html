@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Métadonnées de la page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisation des algorithmes de tri</title>
+    <!-- Chargement de la bibliothèque Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Styles CSS -->
     <style>
         #chart-container {
             margin-top: 20px;
@@ -17,7 +20,9 @@
     </style>
 </head>
 <body>
+    <!-- Contenu de la page -->
     <h1>Visualisation des algorithmes de tri</h1>
+    <!-- Sélecteur d'algorithme de tri -->
     <label for="algorithm-select">Choisissez un algorithme de tri :</label>
     <select id="algorithm-select">
         <option value="selection">Tri par sélection</option>
@@ -26,11 +31,16 @@
         <option value="heap">Tri par tas</option>
         <option value="quick">Tri rapide</option>
     </select>
+    <!-- Bouton pour exécuter l'algorithme de tri -->
     <button onclick="runAlgorithm()">Exécuter</button>
+    <!-- Conteneur pour le graphique -->
     <div id="chart-container"></div>
+    <!-- Conteneur pour les indicateurs de performance -->
     <div id="performance-indicators"></div>
 
+    <!-- JavaScript -->
     <script>
+        // Fonction pour afficher un graphique à barres
         function plotGraph(data, title) {
             const chartContainer = document.getElementById('chart-container');
             chartContainer.innerHTML = '';
@@ -62,14 +72,18 @@
             });
         }
 
+        // Fonction utilitaire pour suspendre l'exécution pendant un certain temps
         async function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
+        // Fonction exécutée lors du clic sur le bouton "Exécuter"
         async function runAlgorithm() {
+            // Récupération de l'algorithme de tri sélectionné
             const algorithmSelect = document.getElementById('algorithm-select');
             const selectedAlgorithm = algorithmSelect.value;
 
+            // Sélection de la fonction d'algorithme de tri correspondante
             let algorithmFunction;
             switch (selectedAlgorithm) {
                 case 'selection':
@@ -91,26 +105,32 @@
                     return;
             }
 
-            const data = generateRandomData(100); // Générer des données aléatoires
+            // Génération de données aléatoires
+            const data = generateRandomData(100);
             let comparisons = 0;
             let swaps = 0;
             const startTime = performance.now();
 
+            // Exécution de l'algorithme de tri étape par étape
             for (let i = 0; i < data.length - 1; i++) {
                 const result = await algorithmFunction(data, i);
                 comparisons += result.comparisons;
                 swaps += result.swaps;
+                // Affichage du graphique à chaque étape du tri
                 plotGraph(data.slice(), `${selectedAlgorithm} (Étape ${i + 1} sur ${data.length - 1})`);
-                await sleep(100); // Attendre 100 millisecondes entre chaque étape pour visualiser le défilement
+                await sleep(100); // Attente de 100 millisecondes entre chaque étape pour visualiser le défilement
             }
 
+            // Calcul du temps d'exécution
             const endTime = performance.now();
-            const executionTime = (endTime - startTime) / 1000; // Convertir en secondes
+            const executionTime = (endTime - startTime) / 1000; // Conversion en secondes
 
+            // Affichage des indicateurs de performance
             const performanceIndicators = document.getElementById('performance-indicators');
             performanceIndicators.innerHTML = `Temps d'exécution : ${executionTime.toFixed(3)} secondes, Comparaisons : ${comparisons}, Échanges : ${swaps}`;
         }
 
+        // Fonction pour générer des données aléatoires
         function generateRandomData(size) {
             const data = [];
             for (let i = 0; i < size; i++) {
@@ -119,7 +139,8 @@
             return data;
         }
 
-        // Implémentez vos fonctions de tri ici
+        // Implémentation des fonctions de tri
+        // Chaque fonction retourne le nombre de comparaisons et d'échanges effectués pendant le tri
         async function selectionSort(arr, i) {
             // Implémentation du tri par sélection
             let minIdx = i;
@@ -246,3 +267,4 @@
     </script>
 </body>
 </html>
+
