@@ -36,9 +36,10 @@
     <p>Cette application est en cours de développement. voici ce qu'il faut rajouter :</p>
     <ul>
         <li>performance du tri :temps d'execution (avec ou sans l'attente jsp), nombre de comparaison, nombre de déplacement de vlaeur</li>
-        <li>des boutons pour démarer, mettre en pause et peu être étape par étape</li>
+        <li>boutton d'arret complet + si on stop puis recommence ça reste statique</li>
         <li>pouvoir selecioner entre quoi et quoi les valeurs sont comprisent </li>
         <li> rajouter de algorithmes</li>
+        <li>rendre ça beau </li>
     </ul>
 
 
@@ -57,7 +58,9 @@
 
     <div id="errorMessage" style="display: none; color: red;"></div>
 
-    <button class="button" onclick="stopFunction()">stop</button>
+    <button class="button" onclick="stopFunction()">pause</button>
+    <button class="button" onclick="resumeFunction()">resume</button>
+    <button class="button" onclick="onestepFunciton()">one step</button>
 
 
     <script>
@@ -65,6 +68,9 @@
         let selectValue;
         let valueinput;
         let stopExecution = false;
+        let onestep = false;
+        let resume = false;
+        let running = false;
         //récupère la valeur dans le choix du tri
         function getSelectValue() {
             const selectElement = document.querySelector('#mySelect');
@@ -80,6 +86,20 @@
         function stopFunction() {
         stopExecution = true;
         }
+        
+        function onestepFunciton() {
+            onestep = true;
+        }
+
+        function resumeFunction() {
+            resume=true;
+        }
+
+        function startfunction(){
+        stopExecution = false;
+        onestep = false;
+        resume = false;
+        }
 
         //affiche le message d'erreur 
         function afficherErreur(message) {
@@ -90,6 +110,7 @@
 
 
         function SortVisualization() {
+            if(running){return;}
             getSelectValue();
             getValueinput();
             if(valueinput <3 || valueinput > 1000) {
@@ -116,6 +137,8 @@
 
             // Fonction pour effectuer le tri à bulles et dessiner chaque étape sur le canvas
             async function bubbleSort() {
+                running = true;
+                startfunction; //remet les varialbes a leur palces
                 for (var i = 0; i < n - 1; i++) {
                     for (var j = 0; j < n - i - 1; j++) {
                         if (array[j] > array[j + 1]) {
@@ -127,16 +150,29 @@
                             drawArray();
                             await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
                             if(stopExecution) {
-                                stopExecution=false;
-                                return;
+                                while(!(onestep||resume)){
+                                    await new Promise(resolve => setTimeout(resolve, 50));
+                                }
+                                if(onestep) {
+                                    onestep=false;
+                                    stopExecution=true;
+                                }
+                                if(resume) {
+                                    resume=false;
+                                    stopExecution=false;
+                                    onestep=false;
+                                }
                             }
                         }
                     }
                 }
+                running = false;
             }
 
             // Fonction pour effectuer le tri par sélection et dessiner chaque étape sur le canvas
             async function selectionSort() {
+                startfunction;
+                running=true;
                 for (var i = 0; i < n - 1; i++) {
                     var minIndex = i;
                     for (var j = i + 1; j < n; j++) {
@@ -153,11 +189,22 @@
                         drawArray();
                         await new Promise(resolve => setTimeout(resolve, 35)); // Attendre 10 millisecondes
                         if(stopExecution) {
-                            stopExecution=false;
-                            return;
+                            while(!(onestep||resume)){
+                                await new Promise(resolve => setTimeout(resolve, 50));
+                            }
+                            if(onestep) {
+                                onestep=false;
+                                stopExecution=true;
+                            }
+                            if(resume) {
+                                resume=false;
+                                stopExecution=false;
+                                onestep=false;
+                            }
                         }
                     }
                 }
+                running=false;
             }
 
             // Appelle la fonction de tri appropriée en fonction de la valeur sélectionnée
