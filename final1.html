@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Application Web</title>
+    <style>
+        /* Styles CSS pour le bouton */
+        .button {
+            background-color: #4CAF50; /* couleur de fond verte */
+            border: none;
+            color: white; /* couleur du texte blanc */
+            padding: 15px 32px; /* taille du bouton */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px; /* coins arrondis */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* ombre */
+            transition: box-shadow 0.3s ease; /* transition douce de l'ombre */
+        }
+        /* Au survol, agrandir légèrement le bouton */
+        .button:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        /* Styles CSS pour le canvas */
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur Mon Application Web !</h1>
+    <p>Cette application est en cours de développement. voici ce qu'il faut rajouter :</p>
+    <ul>
+        <li>performance du tri :temps d'execution (avec ou sans l'attente jsp), nombre de comparaison, nombre de déplacement de vlaeur</li>
+        <li>boutton d'arret complet + si on stop puis recommence ça reste statique</li>
+        <li>pouvoir selecioner entre quoi et quoi les valeurs sont comprisent </li>
+        <li> rajouter de algorithmes</li>
+        <li>rendre ça beau </li>
+    </ul>
+
+    <select id="mySelect">
+        <option value="1">Tri à bulles</option>
+        <option value="2">Tri par sélection</option>
+        <option value="3">Tri à peigne</option>
+        <option value="4">Tri par tas</option>
+        <option value="5">Tri rapide</option>
+        <!-- Ajoute d'autres options pour d'autres algorithmes de tri -->
+    </select>
+    <canvas id="visualization" width="800" height="400"></canvas>
+
+    <button id="idbutton" class="button" onclick="SortVisualization()">Démarrer le tri</button>
+
+    <label for="arraySize">Taille du tableau : </label>
+    <input type="number" id="arraySize" name="arraySize" min="1" max="1000" value="100">
+
+    <div id="errorMessage" style="display: none; color: red;"></div>
+
+    <button class="button" onclick="stopFunction()">pause</button>
+    <button class="button" onclick="resumeFunction()">resume</button>
+    <button class="button" onclick="onestepFunciton()">one step</button>
+
+
+    <script>
+        //constantes :
+        let selectValue;
+        let valueinput;
+        let stopExecution = false;
+        let onestep = false;
+        let resume = false;
+        let running = false;
+        //récupère la valeur dans le choix du tri
+        function getSelectValue() {
+            const selectElement = document.querySelector('#mySelect');
+            selectValue = selectElement.value;
+        }
+
+        function getValueinput() {
+            var inputElement = document.getElementById("arraySize");
+            // Récupérer la valeur de l'attribut value
+            valueinput = inputElement.value;
+        }
+
+        function stopFunction() {
+        stopExecution = true;
+        }
+
+        function onestepFunciton() {
+            onestep = true;
+        }
+
+        function resumeFunction() {
+            resume=true;
+        }
+
+        function startfunction(){
+        stopExecution = false;
+        onestep = false;
+        resume = false;
+        }
+
+        //affiche le message d'erreur
+        function afficherErreur(message) {
+            var errorMessageElement = document.getElementById("errorMessage");
+            errorMessageElement.innerText = message;
+            errorMessageElement.style.display = "block";
+        }
+
+
+        function SortVisualization() {
+            if(running){return;}
+            getSelectValue();
+            getValueinput();
+            if(valueinput <3 || valueinput > 1000) {
+                afficherErreur("la valeur doit être comrpis entre 3 et 1000");
+                return;
+            }
+
+            var canvas = document.getElementById("visualization");
+            var ctx = canvas.getContext("2d");
+            var array = generateRandomArray(valueinput); // Génère un tableau de valueinput éléments aléatoires
+            var n = array.length;
+
+            // Fonction pour dessiner le tableau sur le canvas
+            function drawArray() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                var barWidth = canvas.width / n;
+                var barHeightRatio = canvas.height / Math.max(...array);
+                for (var i = 0; i < n; i++) {
+                    var barHeight = array[i] * barHeightRatio;
+                    ctx.fillStyle = "blue";
+                    ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+                }
+            }
+
+            // Fonction pour effectuer le tri à bulles et dessiner chaque étape sur le canvas
+            async function bubbleSort() {
+                running = true;
+                startfunction; //remet les varialbes a leur palces
+                for (var i = 0; i < n - 1; i++) {
+                    for (var j = 0; j < n - i - 1; j++) {
+                        if (array[j] > array[j + 1]) {
+                            // Échange les éléments
+                            var temp = array[j];
+                            array[j] = array[j + 1];
+                            array[j + 1] = temp;
+                            // Dessine le tableau après chaque échange
+                            drawArray();
+                            await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
+                            if(stopExecution) {
+                                while(!(onestep||resume)){
+                                    await new Promise(resolve => setTimeout(resolve, 50));
+                                }
+                                if(onestep) {
+                                    onestep=false;
+                                    stopExecution=true;
+                                }
+                                if(resume) {
+                                    resume=false;
+                                    stopExecution=false;
+                                    onestep=false;
+                                }
+                            }
+                        }
+                    }
+                }
+                running = false;
+            }
+
+            // Fonction pour effectuer le tri par sélection et dessiner chaque étape sur le canvas
+            async function selectionSort() {
+                startfunction;
+                running=true;
+                for (var i = 0; i < n - 1; i++) {
+                    var minIndex = i;
+                    for (var j = i + 1; j < n; j++) {
+                        if (array[j] < array[minIndex]) {
+                            minIndex = j;
+                        }
+                    }
+                    if (minIndex != i) {
+                        // Échange les éléments
+                        var temp = array[i];
+                        array[i] = array[minIndex];
+                        array[minIndex] = temp;
+                        // Dessine le tableau après chaque échange
+                        drawArray();
+                        await new Promise(resolve => setTimeout(resolve, 35)); // Attendre 10 millisecondes
+                        if(stopExecution) {
+                            while(!(onestep||resume)){
+                                await new Promise(resolve => setTimeout(resolve, 50));
+                            }
+                            if(onestep) {
+                                onestep=false;
+                                stopExecution=true;
+                            }
+                            if(resume) {
+                                resume=false;
+                                stopExecution=false;
+                                onestep=false;
+                            }
+                        }
+                    }
+                }
+                running=false;
+            }
+
+            // Fonction pour effectuer le tri à peigne et dessiner chaque étape sur le canvas
+            async function combSort() {
+                startfunction();
+                running=true;
+                let gap = n;
+                let shrink = 1.3;
+                let sorted = false;
+                while (!sorted) {
+                    gap = Math.floor(gap / shrink);
+                    if (gap <= 1) {
+                        gap = 1;
+                        sorted = true;
+                    }
+                    let swapped = false;
+                    for (let i = 0; i + gap < n; i++) {
+                        if (array[i] > array[i + gap]) {
+                            // Échange les éléments
+                            let temp = array[i];
+                            array[i] = array[i + gap];
+                            array[i + gap] = temp;
+                            swapped = true;
+                            // Dessine le tableau après chaque échange
+                            drawArray();
+                            await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
+                            if(stopExecution) {
+                                while(!(onestep||resume)){
+                                    await new Promise(resolve => setTimeout(resolve, 50));
+                                }
+                                if(onestep) {
+                                    onestep=false;
+                                    stopExecution=true;
+                                }
+                                if(resume) {
+                                    resume=false;
+                                    stopExecution=false;
+                                    onestep=false;
+                                }
+                            }
+                        }
+                    }
+                }
+                running=false;
+            }
+
+            // Fonction pour effectuer le tri par tas et dessiner chaque étape sur le canvas
+            async function heapSort() {
+                startfunction();
+                running=true;
+                function heapify(arr, n, i) {
+                    let largest = i;
+                    let l = 2 * i + 1;
+                    let r = 2 * i + 2;
+
+                    if (l < n && arr[l] > arr[largest]) {
+                        largest = l;
+                    }
+
+                    if (r < n && arr[r] > arr[largest]) {
+                        largest = r;
+                    }
+
+                    if (largest !== i) {
+                        let temp = arr[i];
+                        arr[i] = arr[largest];
+                        arr[largest] = temp;
+                        heapify(arr, n, largest);
+                    }
+                }
+
+                for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+                    heapify(array, n, i);
+                }
+
+                for (let i = n - 1; i > 0; i--) {
+                    let temp = array[0];
+                    array[0] = array[i];
+                    array[i] = temp;
+                    heapify(array, i, 0);
+                    drawArray();
+                    await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
+                    if(stopExecution) {
+                        while(!(onestep||resume)){
+                            await new Promise(resolve => setTimeout(resolve, 50));
+                        }
+                        if(onestep) {
+                            onestep=false;
+                            stopExecution=true;
+                        }
+                        if(resume) {
+                            resume=false;
+                            stopExecution=false;
+                            onestep=false;
+                        }
+                    }
+                }
+                running=false;
+            }
+
+            // Fonction pour effectuer le tri rapide et dessiner chaque étape sur le canvas
+            async function quickSort() {
+                startfunction();
+                running=true;
+                async function partition(low, high) {
+                    let pivot = array[high];
+                    let i = low - 1;
+                    for (let j = low; j < high; j++) {
+                        if (array[j] < pivot) {
+                            i++;
+                            let temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                            drawArray();
+                            await new Promise(resolve => setTimeout(resolve, 10)); // Attendre 10 millisecondes
+                            if(stopExecution) {
+                                while(!(onestep||resume)){
+                                    await new Promise(resolve => setTimeout(resolve, 50));
+                                }
+                                if(onestep) {
+                                    onestep=false;
+                                    stopExecution=true;
+                                }
+                                if(resume) {
+                                    resume=false;
+                                    stopExecution=false;
+                                    onestep=false;
+                                }
+                            }
+                        }
+                    }
+                    let temp = array[i + 1];
+                    array[i + 1] = array[high];
+                    array[high] = temp;
+                    return i + 1;
+                }
+
+                async function quickSortHelper(low, high) {
+                    if (low < high) {
+                        let pi = await partition(low, high);
+                        await quickSortHelper(low, pi - 1);
+                        await quickSortHelper(pi + 1, high);
+                    }
+                }
+
+                await quickSortHelper(0, n - 1);
+                running=false;
+            }
+
+            // Appelle la fonction de tri appropriée en fonction de la valeur sélectionnée
+            if (selectValue == 1) {
+                bubbleSort();
+            } else if (selectValue == 2) {
+                selectionSort();
+            } else if (selectValue == 3) {
+                combSort();
+            } else if (selectValue == 4) {
+                heapSort();
+            } else if (selectValue == 5) {
+                quickSort();
+            }
+        }
+
+        // Fonction pour générer un tableau de nombres aléatoires
+        function generateRandomArray(taille) {
+            // Crée un tableau vide de la taille spécifiée
+            var tableau = new Array(taille);
+
+            // Remplit le tableau avec des valeurs consécutives
+            for (var i = 0; i < taille; i++) {
+                tableau[i] = i + 1;
+            }
+
+            // Mélange les éléments du tableau de manière aléatoire
+            for (var i = taille - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = tableau[i];
+                tableau[i] = tableau[j];
+                tableau[j] = temp;
+            }
+
+            // Retourne le tableau rempli
+            return tableau;
+        }
+    </script>
+</body>
+</html>
