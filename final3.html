@@ -246,7 +246,6 @@
                     gap = Math.floor(gap / shrink);
                     if (gap <= 1) {
                         gap = 1;
-                        sorted = true;
                     }
                     let swapped = false;
                     for (let i = 0; i + gap < n; i++) {
@@ -278,6 +277,7 @@
                             }
                         }
                     }
+                    if(!swapped){sorted = true;}
                 }
                 running=false;
             }
