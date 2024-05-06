@@ -447,77 +447,77 @@
             // Fonction pour effectuer le tri rapide et dessiner chaque étape sur le canvas
             async function quickSort() {
 
-            startTime = performance.now();
-            startFunction();
-            running=true;
-            comparaisonCount = 0;
-            echangeCount = 0;
-            indexfuctionswap(-1,-1);
-                async function partition(low, high) {
-                   let pivot = array[high];
-                   let i = low - 1;
-                   for (let j = low; j < high; j++) {
-                       comparaisonCount++;
+    startTime = performance.now();
+    startFunction();
+    running=true;
+    comparaisonCount = 0;
+    echangeCount = 0;
+    indexfuctionswap(-1,-1);
+        async function partition(low, high) {
+           let pivot = array[high];
+           let i = low - 1;
+           for (let j = low; j < high; j++) {
+               comparaisonCount++;
 
-                        if (array[j] < pivot) {
-                            i++;
-                            echangeCount++;
-                            indexfuctionswap(i,j);
-                            let temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                            drawArray();
-                            await new Promise(resolve => setTimeout(resolve, 10));
-                            if(reset) {
-                                return;}
-                            if(stopExecution) {
-                                while(!(onestep||resume)){
-                                    await new Promise(resolve => setTimeout(resolve, 50));
-                                }
-                                if(onestep) {
-                                    onestep=false;
-                                    stopExecution=true;
-                                }
-                                if(resume) {
-                                    resume=false;
-                                    stopExecution=false;
-                                    onestep=false;
-                                }
-                                if (reset) {
-                                   reset = false;
-                                   resetFunction();
-                                   running = false;
-                                   return;
-                                }
-                            }
-                        }
-                    }
+                if (array[j] < pivot) {
+                    i++;
                     echangeCount++;
-                    let temp = array[i + 1];
-                    array[i + 1] = array[high];
-                    array[high] = temp;
-                    return i + 1;
+                    indexfuctionswap(i,j);
+                    let temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
                 }
-
-                async function quickSortHelper(low, high) {
-                    if (low < high) {
-                        let pi = await partition(low, high);
-                        await quickSortHelper(low, pi - 1);
-                        await quickSortHelper(pi + 1, high);
-                    }
-                }
-                await quickSortHelper(0, n - 1);
-                endTime = performance.now();
-                const executionTime = endTime - startTime;
-                console.log("Temps d'exécution pour le tri rapide(s) : ", executionTime/1000);
-                const executionTimeElement = document.getElementById('executionTime');
-                executionTimeElement.innerText = `Temps d'exécution : ${(executionTime/1000).toFixed(2)} s`;
-                executionTimeElement.innerText += `\nNombre de comparaisons : ${comparaisonCount}`;
-                executionTimeElement.innerText += `\nNombre d'échanges : ${echangeCount}`;
-
-                running=false;
             }
+            echangeCount++;
+            let temp = array[i + 1];
+            array[i + 1] = array[high];
+            array[high] = temp;
+            drawArray();
+            await new Promise(resolve => setTimeout(resolve, 10));
+            if(reset) {
+                return;}
+            if(stopExecution) {
+                while(!(onestep||resume)){
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+                if(onestep) {
+                    onestep=false;
+                    stopExecution=true;
+                }
+                if(resume) {
+                    resume=false;
+                    stopExecution=false;
+                    onestep=false;
+                }
+                if (reset) {
+                   reset = false;
+                   resetFunction();
+                   running = false;
+                   return;
+                }
+            }
+            return i + 1;
+        }
 
+        async function quickSortHelper(low, high) {
+            if (low < high) {
+                let pi = await partition(low, high);
+                await quickSortHelper(low, pi - 1);
+                await quickSortHelper(pi + 1, high);
+            }
+        }
+        await quickSortHelper(0, n - 1);
+        endTime = performance.now();
+        const executionTime = endTime - startTime;
+        console.log("Temps d'exécution pour le tri rapide(s) : ", executionTime/1000);
+        const executionTimeElement = document.getElementById('executionTime');
+        executionTimeElement.innerText = `Temps d'exécution : ${(executionTime/1000).toFixed(2)} s`;
+        executionTimeElement.innerText += `\nNombre de comparaisons : ${comparaisonCount}`;
+        executionTimeElement.innerText += `\nNombre d'échanges : ${echangeCount}`;
+
+        running=false;
+    }
+            
             // Fonction pour effectuer le tri fusion et dessiner chaque étape sur le canvas
 async function mergeSort() {
     let startTime, endTime;
