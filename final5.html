@@ -58,7 +58,10 @@ v<!DOCTYPE html>
     <button id="idbutton" class="button" onclick="SortVisualization()">Go</button>
 
     <label for="arraySize">Taille du tableau : </label>
-    <input type="number" id="arraySize" name="arraySize" min="1" max="1000" value="100">
+    <input type="number" id="arraySize" name="arraySize" min="1" max="10000" value="100">
+    <label for="awaittime">délais d'attente : </label>
+    <input type="number" id="awaittime" name="awaittime" min="1" max="1000" value="30">ms
+
 
     <div id="errorMessage" style="display: none; color: red;"></div>
 
@@ -82,12 +85,14 @@ v<!DOCTYPE html>
         let echangeCount = 0;   // cpt
         let indexswap1;
         let indexswap2;
+        let awaittime=30; 
 
-        window.onload = init;
+        window.onload = init();
 
         function init() {
             getSelectValue();
             getValueInput();
+            getAwaittime();
             var array = generateRandomArray(ValueInput);
             drawArray(array);
         }
@@ -95,8 +100,8 @@ v<!DOCTYPE html>
         //récupère la valeur dans le choix du tri
         function getSelectValue()
         {
- const selectElement = document.querySelector('#mySelect');
-            selectValue = selectElement.value;
+        const selectElement = document.querySelector('#mySelect');
+        selectValue = selectElement.value;
         }
 
         function getValueInput() {
@@ -104,6 +109,11 @@ v<!DOCTYPE html>
             // Récupérer la valeur de l'attribut value
             ValueInput = inputElement.value;
         }
+
+        function getAwaittime() {
+            var inputElement = document.getElementById("awaittime");
+            awaittime = inputElement.value;
+        }        
 
         function stopFunction() {
             stopExecution = true;
@@ -166,8 +176,9 @@ v<!DOCTYPE html>
             if(running){return;}
             getSelectValue();
             getValueInput();
-            if(isNaN(ValueInput) || ValueInput <3 || ValueInput > 1000) {
-                AfficheErreur("la valeur doit être compris entre 3 et 1000");
+            getAwaittime();
+            if(isNaN(ValueInput) || ValueInput <3 || ValueInput > 10000) {
+                AfficheErreur("la valeur doit être compris entre 3 et 10000");
                 return;
             }
             stopExecution = false;
@@ -203,7 +214,7 @@ v<!DOCTYPE html>
                             array[j + 1] = temp;
                             // Dessine le tableau après chaque échange
                             drawArray(array);
-                            await new Promise(resolve => setTimeout(resolve, 10));
+                            await new Promise(resolve => setTimeout(resolve, awaittime));
                             if(reset) {
                                 resetFunction();
                                 reset=false;
@@ -271,7 +282,7 @@ v<!DOCTYPE html>
                         array[minIndex] = temp;
                         // Dessine le tableau après chaque échange
                         drawArray(array);
-                        await new Promise(resolve => setTimeout(resolve, 35));
+                        await new Promise(resolve => setTimeout(resolve, awaittime));
                         if(reset) {
                             resetFunction();
                             reset=false;
@@ -342,7 +353,7 @@ v<!DOCTYPE html>
                             swapped = true;
                             // Dessine le tableau après chaque échange
                             drawArray(array);
-                            await new Promise(resolve => setTimeout(resolve, 35));
+                            await new Promise(resolve => setTimeout(resolve, awaittime));
                             if(reset) {
                                 resetFunction();
                                 reset=false;
@@ -428,7 +439,7 @@ v<!DOCTYPE html>
                     array[i] = temp;
                     heapify(array, i, 0);
                     drawArray(array);
-                    await new Promise(resolve => setTimeout(resolve, 10));
+                    await new Promise(resolve => setTimeout(resolve, awaittime));
 
                     if(reset) {
                         resetFunction();
@@ -494,7 +505,7 @@ v<!DOCTYPE html>
                     array[i + 1] = array[high];
                     array[high] = temp;
                     drawArray(array);
-                    await new Promise(resolve => setTimeout(resolve, 10));
+                    await new Promise(resolve => setTimeout(resolve, awaittime));
                     if(reset) {
                         return;
                     }
@@ -602,7 +613,7 @@ v<!DOCTYPE html>
                 }
 
                 drawArray(arr);
-                await new Promise(resolve => setTimeout(resolve, 10));
+                await new Promise(resolve => setTimeout(resolve, awaittime));
                 if (reset) {
                     reset = false;
                     running = false;
