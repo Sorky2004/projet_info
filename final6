@@ -85,16 +85,16 @@
 
     <canvas id="visualization" width="800" height="400"></canvas>
     <p id="executionTime"></p>
-    <button id="idbutton" class="button" onclick="SortVisualization()">Go</button>
+    <button id="idbutton" class="button" onclick="SortVisualization()">Démarer</button>
     <label for="arraySize">Taille du tableau : </label>
     <input type="number" id="arraySize" name="arraySize" min="1" max="1000" value="100">
 
     <div id="errorMessage" style="display: none; color: red;"></div>
 
-    <button class="button" onclick="stopFunction()">stop</button>
-    <button class="button" onclick="resumeFunction()">resume</button>
-    <button class="button" onclick="onestepFunction()">one step</button>
-    <button class="button" onclick="resetFunction()">reset</button>
+    <button class="button" onclick="stopFunction()">Pause</button>
+    <button class="button" onclick="resumeFunction()">Reprendre</button>
+    <button class="button" onclick="onestepFunction()">Une itération</button>
+    <button class="button" onclick="resetFunction()">Annuler</button>
     <script>
         //constantes :
         //let selectValue;
