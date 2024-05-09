@@ -182,9 +182,12 @@
         function resumeFunction() {
             resume=true;}
 
-        function resetFunction() {
-            reset = true;}
-
+  function resetFunction() {
+    reset = true;
+    stopExecution = true; // Arrête immédiatement l'exécution du tri
+    var array = generateRandomArray(ValueInput); // Regénère le tableau aléatoire
+    drawArray(array); // Redessine le tableau
+}
         function startFunction(){
             stopExecution = false;
             onestep = false;
