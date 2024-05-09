@@ -108,6 +108,11 @@
             <input type="number" id="arraySize" name="arraySize" min="1" max="1000" value="100">
         </div>
 
+        <div class="form-container">
+            <label for="wtime">Temps d'attente entre execution :</label>
+            <input type="number" id="wtime" name="wtime" min="1" max="3000" value="30">ms
+        </div>
+
         <div class="form-container order-selector">
             <label>Ordre de tri :</label>
             <input type="radio" id="ascending" name="order" value="ascending" checked>
@@ -143,12 +148,14 @@
         let echangeCount = 0;   // cpt
         let indexswap1;
         let indexswap2;
+        let wtime=30;
 
         window.onload = init;
 
         function init() {
             getSelectValue();
             getValueInput();
+            getwtime();
             var array = generateRandomArray(ValueInput);
             drawArray(array);}
 
@@ -191,6 +198,10 @@
             indexswap1=a;
             indexswap2=b;}
 
+        function getwtime(){
+            var inputElement = document.getElementById("wtime");
+            wtime = inputElement.value;}
+
         //affiche le message d'erreur
         function AfficheErreur(message) {
             var errorMessageElement = document.getElementById("errorMessage");
@@ -198,6 +209,7 @@
             errorMessageElement.style.display = "block";}
 
         function drawArray(array) {
+            getwtime();
             var canvas = document.getElementById("visualization");
             var ctx = canvas.getContext("2d");
             var n = array.length;
@@ -221,6 +233,7 @@
     getSelectValue();
     getValueInput();
     const order = getOrderValue(); // Obtenez l'ordre sélectionné
+    getwtime();
     if(isNaN(ValueInput) || ValueInput < 3 || ValueInput > 1000) {
         AfficheErreur("La valeur doit être comprise entre 3 et 1000");
         return;
@@ -287,7 +300,7 @@ async function bubbleSort(array, order) {
                 array[j + 1] = temp;
                 // Dessine le tableau après chaque échange
                 drawArray(array);
-                await new Promise(resolve => setTimeout(resolve, 10));
+                await new Promise(resolve => setTimeout(resolve, wtime));
                 if(reset) {
                     resetFunction();
                     reset=false;
@@ -355,7 +368,7 @@ async function selectionSort(array, order) {
             array[minIndex] = temp;
             // Dessine le tableau après chaque échange
             drawArray(array);
-            await new Promise(resolve => setTimeout(resolve, 35));
+            await new Promise(resolve => setTimeout(resolve, wtime));
             if(reset) {
                 resetFunction();
                 reset=false;
@@ -426,7 +439,7 @@ async function combSort(array, order) {
                 swapped = true;
                 // Dessine le tableau après chaque échange
                 drawArray(array);
-                await new Promise(resolve => setTimeout(resolve, 35));
+                await new Promise(resolve => setTimeout(resolve, wtime));
                 if(reset) {
                     resetFunction();
                     reset=false;
@@ -515,7 +528,7 @@ async function heapSort(array, order) {
         array[i] = temp;
         heapify(array, i, 0);
         drawArray(array);
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise(resolve => setTimeout(resolve, wtime));
 
         if(reset) {
             resetFunction();
@@ -581,7 +594,7 @@ async function quickSort(array, order) {
         array[i + 1] = array[high];
         array[high] = temp;
         drawArray(array);
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise(resolve => setTimeout(resolve, wtime));
         if(reset) {
             return;
         }
@@ -686,7 +699,7 @@ async function merge(arr, left, middle, right) {
         echangeCount++; // Incrémenter le compteur d'échanges
     }
     drawArray(arr);
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise(resolve => setTimeout(resolve, wtime));
     if (reset) {
         reset = false;
         running = false;
