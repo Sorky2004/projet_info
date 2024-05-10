@@ -85,12 +85,65 @@
             justify-content: center;
             margin-bottom: 20px;
         }
+
+        /* Styliser les boutons d'information */
+.info-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+/* Styliser les bulles d'aide */
+.info-box {
+    display: none;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Styliser les éléments qui montrent les bulles d'aide */
+.algorithm-info {
+    position: relative;
+}
+
+/* Ajuster la position des bulles d'aide */
+.algorithm-info:hover .info-box {
+    display: block;
+}
     </style>
 </head>
 <body>
+    
     <div class="container">
         <h1>Bienvenue sur TriVisio !</h1>
 
+        <div class="algorithm-info">
+         <button class="info-button" onclick="toggleInfo('bubbleSort')">ℹ️</button>
+         <button class="info-button" onclick="toggleInfo('selectionSort')">ℹ️</button>
+         <button class="info-button" onclick="toggleInfo('combSort')">ℹ️</button>
+         <button class="info-button" onclick="toggleInfo('heapSort')">ℹ️</button>
+         <button class="info-button" onclick="toggleInfo('quickSort')">ℹ️</button>
+         <button class="info-button" onclick="toggleInfo('mergeSort')">ℹ️</button>
+        </div>
+
+        <div id="bubbleSortInfo" class="info-box">
+    <h3>Tri à bulles</h3>
+    <p>Cet algorithme de tri parcourt répétitivement la liste, compare chaque élément adjacent et les échange s'ils sont dans le mauvais ordre.</p>
+    <p>Complexité temporelle : O(n^2)</p>
+    <!-- Ajouter d'autres informations pertinentes -->
+       </div>
+        <div id="selectionSortInfo" class="info-box">
+    <h3>Tri par sélection</h3>
+    <p>Cet algorithme de tri parcourt la liste à plusieurs reprises, recherche l'élément le plus petit et le place à la bonne position.</p>
+    <p>Complexité temporelle : O(n^2)</p>
+
+       </div>
+        
         <div class="form-container">
             <label for="mySelect">Choisir un algorithme de tri :</label>
             <select id="mySelect">
@@ -151,6 +204,11 @@
         let wtime=30;
         window.onload = init;
 
+        // JavaScript pour activer / désactiver les bulles d'aide
+function toggleInfo(id) {
+    var infoBox = document.getElementById(id + 'Info');
+    infoBox.style.display = infoBox.style.display === 'block' ? 'none' : 'block';
+}
         function init() {
             getSelectValue();
             getValueInput();
