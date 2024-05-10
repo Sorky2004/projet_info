@@ -141,12 +141,12 @@
         <h1>Bienvenue sur TriVisio !</h1>
 
         <div class="algorithm-info">
-         <button class="info-button" onclick="toggleInfo('bubbleSort')">ℹ️</button>
-         <button class="info-button" onclick="toggleInfo('selectionSort')">ℹ️</button>
-         <button class="info-button" onclick="toggleInfo('combSort')">ℹ️</button>
-         <button class="info-button" onclick="toggleInfo('heapSort')">ℹ️</button>
-         <button class="info-button" onclick="toggleInfo('quickSort')">ℹ️</button>
-         <button class="info-button" onclick="toggleInfo('mergeSort')">ℹ️</button>
+         <button class="info-button" onclick="toggleInfo('bubbleSort')">ℹ🔴</button>
+         <button class="info-button" onclick="toggleInfo('selectionSort')">ℹ🟡</button>
+         <button class="info-button" onclick="toggleInfo('combSort')">ℹ🟢</button>
+         <button class="info-button" onclick="toggleInfo('heapSort')">ℹ🟣</button>
+         <button class="info-button" onclick="toggleInfo('quickSort')">ℹ🟤</button>
+         <button class="info-button" onclick="toggleInfo('mergeSort')">ℹ🔵</button>
         </div>
 
         <div id="bubbleSortInfo" class="info-box">
@@ -371,7 +371,7 @@ function toggleInfo(id) {
     }
 
  // Appelle la fonction de tri appropriée en fonction de la valeur sélectionnée
-running = false; // Réinitialiser la valeur de running à false
+running = false; 
 if (selectValue == 1) {
     callSortFunction(() => bubbleSort(array, order));
 } else if (selectValue == 2) {
