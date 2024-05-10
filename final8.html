@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Application Web</title>
+    <title>TriVisio</title>
     <style>
         body {
             background-color: #1e90ff;
@@ -89,7 +89,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bienvenue sur cette application Web !</h1>
+        <h1>Bienvenue sur TriVisio !</h1>
 
         <div class="form-container">
             <label for="mySelect">Choisir un algorithme de tri :</label>
@@ -144,12 +144,11 @@
         let startTime; //temps de debut
         let endTime;   //temps fin
         let executionTimeInSeconds = 0;
-        let comparaisonCount = 0; // cpt
-        let echangeCount = 0;   // cpt
+        let comparaisonCount = 0; 
+        let echangeCount = 0;  
         let indexswap1;
         let indexswap2;
         let wtime=30;
-
         window.onload = init;
 
         function init() {
@@ -263,8 +262,8 @@
         }
     }
 
-    // Appelle la fonction de tri appropriée en fonction de la valeur sélectionnée
-    running = false; // Réinitialiser la valeur de running à false
+ // Appelle la fonction de tri appropriée en fonction de la valeur sélectionnée
+running = false; // Réinitialiser la valeur de running à false
 if (selectValue == 1) {
     callSortFunction(() => bubbleSort(array, order));
 } else if (selectValue == 2) {
@@ -347,7 +346,7 @@ async function bubbleSort(array, order) {
 running = false;
 }
 
-
+// Fonction pour effectuer le tri par selection et dessiner chaque étape sur le canvas
 async function selectionSort(array, order) {
     var n = array.length; // Obtenir la taille du tableau
     startTime = performance.now();
@@ -418,6 +417,7 @@ async function selectionSort(array, order) {
     }
     running=false;
 }
+      
 // Fonction pour effectuer le tri à peigne et dessiner chaque étape sur le canvas
 async function combSort(array, order) {
     var n = array.length; // Obtenir la taille du tableau
@@ -497,7 +497,7 @@ async function combSort(array, order) {
     }
     running=false;
 }
-
+// Fonction pour effectuer le tri par tas et dessiner chaque étape sur le canvas
 async function heapSort(array, order) {
     var n = array.length; // Obtenir la taille du tableau
     startTime = performance.now();
@@ -589,6 +589,7 @@ async function heapSort(array, order) {
     running=false;
 }
 
+// Fonction pour effectuer le tri rapide et dessiner chaque étape sur le canvas
 async function quickSort(array, order) {
     var n = array.length; // Obtenir la taille du tableau
     startTime = performance.now();
