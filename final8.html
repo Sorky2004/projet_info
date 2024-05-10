@@ -118,6 +118,21 @@
 .algorithm-info:hover .info-box {
     display: block;
 }
+#mySelect {
+    width: 200px; /* Largeur du déroulant */
+    padding: 8px; /* Espacement interne */
+    border: 1px solid #ccc; /* Bordure */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de la police */
+    background-color: #fff; /* Couleur de fond */
+    color: black; /* Couleur du texte */
+    cursor: pointer; /* Curseur au survol */
+}
+
+/* Style au survol */
+#mySelect:hover {
+    border-color: #4CAF50; /* Couleur de la bordure au survol */
+}
     </style>
 </head>
 <body>
@@ -138,37 +153,46 @@
     <h3>Tri à bulles</h3>
     <p>Cet algorithme de tri parcourt répétitivement la liste, compare chaque élément adjacent et les échange s'ils sont dans le mauvais ordre.</p>
     <p>Complexité temporelle : O(n^2)</p>
-    <!-- Ajouter d'autres informations pertinentes -->
+    <p>Il est simple à implémenter mais inefficace pour de grandes listes de données.</p>
+    <p>Cependant, il peut être utile pour trier de petites listes ou comme étape de tri dans un algorithme plus complexe.</p>
        </div>
-        <div id="selectionSortInfo" class="info-box">
+
+      <div id="selectionSortInfo" class="info-box">
     <h3>Tri par sélection</h3>
     <p>Cet algorithme de tri parcourt la liste à plusieurs reprises, recherche l'élément le plus petit et le place à la bonne position.</p>
     <p>Complexité temporelle : O(n^2)</p>
-       </div>
-           <div id="combSortInfo" class="info-box">
-    <h3>Tri à peigne</h3>
-    <p>Cet algorithme de tri parcourt la liste à plusieurs reprises, recherche l'élément le plus petit et le place à la bonne position.</p>
-    <p>Complexité temporelle : O(n^2)</p>
-       </div>
+    <p>Malgré sa simplicité, le tri par sélection est inefficace pour de grandes listes en raison de sa complexité quadratique.</p>
+    <p>Il est souvent utilisé pour illustrer des concepts de base de tri ou dans des situations où l'efficacité n'est pas critique.</p>
+      </div>
 
-        <div id="heapSortInfo" class="info-box">
+        <div id="combSortInfo" class="info-box">
+    <h3>Tri à peigne</h3>
+    <p>Le tri à peigne est une variante du tri par sélection qui parcourt la liste à plusieurs reprises en comparant et en échangeant les éléments adjacents avec un écart appelé "pas".</p>
+    <p>Il utilise un facteur de réduction pour ajuster progressivement la taille du pas, ce qui améliore l'efficacité de l'algorithme par rapport au tri par sélection.</p>
+    <p>Complexité temporelle : O(n^2) dans le pire des cas, mais en pratique, il a une performance meilleure que celle du tri par sélection en raison de son facteur de réduction.</p>
+        </div>
+
+
+       <div id="heapSortInfo" class="info-box">
     <h3>Tri par tas</h3>
-    <p>Cet algorithme de tri parcourt la liste à plusieurs reprises, recherche l'élément le plus petit et le place à la bonne position.</p>
-    <p>Complexité temporelle : O(n^2)</p>
+    <p>Le tri par tas est un algorithme de tri basé sur une structure de données appelée tas, qui est un arbre binaire presque complet où chaque nœud est plus petit que ses enfants.</p>
+    <p>Cet algorithme commence par construire un tas à partir des éléments du tableau, puis extrait répétitivement l'élément racine (le plus petit élément dans le cas du tri par tas) pour le placer à la fin du tableau, réduisant ainsi la taille du tas et construisant progressivement la séquence triée.</p>
+    <p>Complexité temporelle : O(n log n) dans le pire des cas, ce qui en fait l'un des algorithmes de tri les plus efficaces. Cependant, sa mise en œuvre peut être plus complexe que d'autres algorithmes de tri.</p>
        </div>
 
         <div id="quickSortInfo" class="info-box">
     <h3>Tri rapide</h3>
-    <p>Cet algorithme de tri parcourt la liste à plusieurs reprises, recherche l'élément le plus petit et le place à la bonne position.</p>
-    <p>Complexité temporelle : O(n^2)</p>
-       </div>
+    <p>Le tri rapide est un algorithme de tri efficace et rapide qui utilise une approche de divide and conquer (diviser pour régner).</p>
+    <p>Cet algorithme sélectionne un élément pivot dans le tableau et partitionne les autres éléments en fonction de la valeur du pivot, de sorte que les éléments plus petits que le pivot se retrouvent à sa gauche et les éléments plus grands à sa droite. Ensuite, l'algorithme est appliqué récursivement aux sous-tableaux de chaque côté du pivot.</p>
+    <p>Complexité temporelle : En moyenne, le tri rapide a une complexité temporelle de O(n log n). Cependant, dans le pire des cas, lorsque le pivot est mal choisi (par exemple, si le tableau est déjà trié), la complexité temporelle peut être O(n^2), bien que cela soit rare en pratique.</p>
+        </div>
 
-        <div id="mergeSortInfo" class="info-box">
+       <div id="mergeSortInfo" class="info-box">
     <h3>Tri par fusion</h3>
-    <p>Cet algorithme de tri parcourt la liste à plusieurs reprises, recherche l'élément le plus petit et le place à la bonne position.</p>
-    <p>Complexité temporelle : O(n^2)</p>
+    <p>Le tri par fusion est un algorithme de tri efficace qui utilise une stratégie de "diviser pour régner".</p>
+    <p>Cet algorithme divise récursivement le tableau en deux moitiés, trie chaque moitié de manière récursive, puis fusionne les moitiés triées pour produire un tableau trié.</p>
+    <p>Complexité temporelle : Le tri par fusion a une complexité temporelle garantie de O(n log n) dans tous les cas, ce qui en fait l'un des algorithmes de tri les plus efficaces, en particulier pour les grands ensembles de données.</p>
        </div>
-
         
         <div class="form-container">
             <label for="mySelect">Choisir un algorithme de tri :</label>
@@ -213,7 +237,7 @@
 
     <script>
         //constantes :
-        //let selectValue;
+        let selectValue;
         let ValueInput;
         let stopExecution = false;
         let onestep = false;
